@@ -1,7 +1,7 @@
 # D&D Companion App — Project Todo List
 **Team One Piece** · iOS Capstone · Spring 2025
 
-> Delete items as they are completed. Goal is an empty file.
+> Check mark items that have been completed.
 
 ---
 
