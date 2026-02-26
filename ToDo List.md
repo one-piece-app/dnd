@@ -7,7 +7,7 @@
 
 ## 📋 Project Management
 
-- [ ] <Set up branching structure (main, develop, feature branches)> 
+- [x] <Set up branching structure (main, develop, feature branches)> 
 - Share repo with instructor and TA (confirm read access)
 - Submit GitHub link on Canvas
 - Finalize and submit Midterm Progress Report PDF to Canvas
