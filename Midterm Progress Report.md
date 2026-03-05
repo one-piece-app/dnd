@@ -91,17 +91,17 @@ Advanced / Optional Features (Stretch Goals)
 ### Components Implemented So Far
 
 | Component / Feature          | Status      | Owner     | Notes                                             |
-
-|Main Navigation Screen        | Complete    | Ivan      | Home Screen with Character summary and navigation |
-| Dice Roller                  | Complete    | Ivan      | All dice tpyes, modifiers, roll history           |
-| Character Sheet(stats)       | Complete    | Ivan      | Ability scores, HP, AC, proficiency bonus         |
-| Character Sheet(skills)      | Complete    | Ivan      | Skills for the characters such as acrobatics      |
+|------------------------------|-------------|-----------|---------------------------------------------------|
+| Main Navigation Screen       | Complete    | Ivan      | Home Screen with Character summary and navigation |
+| Dice Roller                  | Complete    | Ivan      | All dice types, modifiers, roll history           |
+| Character Sheet (stats)      | Complete    | Ivan      | Ability scores, HP, AC, proficiency bonus         |
+| Character Sheet (skills)     | Complete    | Ivan      | Skills for the characters such as acrobatics      |
 | Notes System                 | Complete    | Ivan      | Full skill list with proficiency toggles          |
 | Settings Screen              | In-Progress | Ivan      | Sound Toggle, dice rolling options etc.           |
 | UI/UX Design Standards       | In-Progress | Jagadeesh | Dark theme, gold accent color scheme, typography  |
 | Data Persistence             | In-Progress | Barrett   | Character and notes saving between session        |
 | Data Models                  | In-Progress | Reese     | Character and notes data structures               |
-| Documentation & coordination | In-Progress | Skylar    | Progress report, role definitions, scheduling     |
+| Documentation & Coordination | In-Progress | Skylar    | Progress report, role definitions, scheduling     |
 | GitHub Branch Management     | In-Progress | Zy        | Branch organization and version control           |
 | GitHub Repository Setup      | Complete    | Reese     | Repository creation and access permissions        |
 
