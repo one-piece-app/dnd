@@ -83,8 +83,15 @@ class CoreDataViewModel: ObservableObject {
         }
     }
 
-    //=~ Character Constructor & Descructor
+    //
 
+    //
+
+    //
+
+    //=~ Character
+
+    //~ Constructor
     func addCharacter (
         name: String = "john doe",
         characterClass: String = "Fighter",
@@ -118,15 +125,22 @@ class CoreDataViewModel: ObservableObject {
         saveContext()
     }
 
+    //~ Descructor
     func deleteCharacter(indexSet: IndexSet) {
         for i in indexSet {container.viewContext.delete(characters[i])}
         for i in indexSet {characters.remove(at: i)}
         saveContext()
     }
 
-    //=~ CharacterStat Private Constructor
-    /// Weak entity CharacterStats is only created on Strong entity Character creation, and deltion is cascaded with parent entity
+    func deleteCharacter(obj: CharacterEntity) {
+        if let index = characters.firstIndex(where: {$0 == obj}) {characters.remove(at: index)}
+        container.viewContext.delete(obj)
+        saveContext()
+    }
 
+    //=~ CharacterStat Private Constructor
+    //~ Constructor
+    /// Weak entity CharacterStats is only created on Strong entity Character creation, and deltion is cascaded with parent entity
     private func addStat(name: String, value: Int16) -> CharacterStatEntity {
         let entity = CharacterStatEntity(context: container.viewContext)
         entity.name = name
@@ -134,8 +148,79 @@ class CoreDataViewModel: ObservableObject {
         return entity
     }
 
-    //=~ Note Constructor & Descructor
 
+    //~ Descructor
+    // N/A
+
+
+    //=~ Campaign
+
+    //~ Constructor
+    //~ Descructor
+
+
+    //=~ Dice
+
+    //~ Constructor
+    func roll(
+        d2: Int = 0,
+        d4: Int = 0,
+        d6: Int = 0,
+        d8: Int = 0,
+        d10: Int = 0,
+        d12: Int = 0,
+        d20: Int = 0,
+        d100: Int = 0,
+    ) -> DiceRollEntity {
+        return roll(dN: [
+            (sides: 2, quantity: d2),
+            (sides: 4, quantity: d4),
+            (sides: 6, quantity: d6),
+            (sides: 8, quantity: d8),
+            (sides: 10, quantity: d10),
+            (sides: 12, quantity: d12),
+            (sides: 20, quantity: d20),
+            (sides: 100, quantity: d100),
+        ])
+    }
+
+    func roll(
+        dN: [(sides: Int16, quantity: Int)],
+    ) -> DiceRollEntity {
+        let parent = DiceRollEntity(context: container.viewContext)
+        parent.timestamp = Date()
+
+        for (sides: sides, quantity: quant) in dN {
+            guard quant > 0 else { continue }
+            for _ in 1...quant {
+                print("sides: \(sides), quant: \(quant)")
+                let child = DieEntity(context: container.viewContext)
+                child.sides = sides as Int16
+                child.value = Int16.random(in: 1...sides)
+
+                print(parent.dice?.count ?? -1)
+                parent.dice = parent.dice?.adding(child) as NSSet? ?? NSSet(objects: [child])
+                print(parent.dice?.count ?? -1)
+            }
+        }
+
+        return parent;
+    }
+
+    //~ Descructor
+    /// Deletes DiceResultEntity, assumes that DiceResultEntity isn't in a published list
+    func deleteDiceRoll(
+        obj: DiceRollEntity,
+    ) {
+        if let index = dice.firstIndex(where: {$0 == obj}) {dice.remove(at: index)}
+        container.viewContext.delete(obj)
+        saveContext()
+    }
+
+
+    //=~ Note
+
+    //~ Constructor
     func addNote(
       title: String = "Title",
       content: String,
@@ -158,89 +243,7 @@ class CoreDataViewModel: ObservableObject {
         saveContext()
     }
 
-    //=~ Dice Constructor, Descructor
-
-    func addDice(
-        sides: Int16 = 20,
-        quantity: Int16 = 1,
-    ) {
-        let entity = DiceEntity(context: container.viewContext)
-        entity.sides = sides
-        entity.quantity = quantity
-        
-        self.dice.append(entity);
-        saveContext()
-    }
-
-    func deleteDice(
-        obj: DiceEntity,
-    ) {
-        let index = dice.firstIndex(of: obj)!
-        dice.remove(at: dice.firstIndex(of: obj)!)
-        container.viewContext.delete(obj);
-        saveContext()
-    }
-
-    func deleteDice(
-        indexSet: IndexSet,
-    ) {
-        for i in indexSet { container.viewContext.delete(dice[i]) }
-        for i in indexSet { dice.remove(at: i) }
-        saveContext()
-    }
-
-    func addDiceRoll(
-        dice: DiceEntity
-    ) -> DiceResultEntity {
-        let root = DiceResultEntity(context: container.viewContext)
-        root.sum = 0
-        root.timestamp = Date()
-
-        for _ in 0...dice.quantity {
-            let child = DiceResultDieEntry(context: container.viewContext)
-            child.result = Int16.random(in: 1...dice.sides)
-            root.sum += child.result
-            root.entries.insert(child)
-
-            container.viewContext.delete(root)
-        }
-
-        return root
-    }
-
-    func deleteDiceRoll(
-        rollResult: DiceResultEntity,
-        dice: DiceEntity,
-    ) {
-        
-
-    }
-
-    struct dieCustom {
-        let sides: Int
-        let quantity: Int
-    }
-
-    func roll(
-        d2: Int = 0,
-        d3: Int = 0,
-        d6: Int = 0,
-        d8: Int = 0,
-        d10: Int = 0,
-        d12: Int = 0,
-        d20: Int = 0,
-        d100: Int = 0,
-        dC: [dieCustom]? = nul,
-    ) -> DiceRollEntity {
-
-    }
-
-    func roll(
-
-    ) -> {
-
-    }
-
+    //~ Descructor
 }
 
 //=~ Extensions of CoreData Entity Types
@@ -278,7 +281,16 @@ extension DiceEntity { }
     }
 }*/
 
-extension DiceResultDieEntity { }
+extension DiceRollEntity {
+    var diceList: [DieEntity] {
+        if self.dice == nil {print("dice is null"); return [] }
+        guard let diceSet = self.dice as? Set<DieEntity> else {print("failed cast"); return []}
+        return diceSet.map{$0}
+    }
+
+    var valueList: [Int] {self.diceList.map{Int($0.value)}}
+    var sum: Int? {self.valueList.reduce(0, +)}
+}
 
 extension NoteEntity { }
 
@@ -290,6 +302,7 @@ struct CoreDataViewModelDebugView: View {
     @StateObject var vm = CoreDataViewModel()
     @State var userInput: String = ""
     @State var selectedCharacter: CharacterEntity?
+
 
     var CharacterPage: some View {
         NavigationView{
@@ -340,7 +353,21 @@ struct CoreDataViewModelDebugView: View {
     }
 
     var DiceRollerPage : some View {
-        Text("boop")
+        VStack {
+            Button(action: {
+                let roll: DiceRollEntity = vm.roll(d20: 2)
+                print(roll.valueList)
+                print("sum: \(roll.sum ?? -20)")
+                vm.deleteDiceRoll(obj: roll)
+                print("pressed")
+            }, label: {
+                Text("Add")
+            })
+            .frame(height: 55).frame(maxWidth: 90)
+            .foregroundColor(Color.white).background(Color.blue)
+            .cornerRadius(10)
+            .padding(.trailing)
+        }
     }
 
     var body : some View {
