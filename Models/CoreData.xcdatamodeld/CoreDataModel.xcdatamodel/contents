@@ -25,12 +25,32 @@
         <relationship name="character" maxCount="1" deletionRule="Cascade" destinationEntity="CharacterEntity" inverseName="stats" inverseEntity="CharacterEntity"/>
     </entity>
     <entity name="DiceEntity" representedClassName="DiceEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="modifier" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="quantity" attributeType="Integer 16" minValueString="1" defaultValueString="1" usesScalarValueType="YES"/>
         <attribute name="sides" attributeType="Integer 16" minValueString="1" defaultValueString="20" usesScalarValueType="YES"/>
+        <relationship name="results" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DiceResultEntity" inverseName="sourceDice" inverseEntity="DiceResultEntity"/>
+    </entity>
+    <entity name="DiceResultDieEntity" representedClassName="DiceResultDieEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="result" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="parentResult" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="DiceResultEntity" inverseName="resultDice" inverseEntity="DiceResultEntity"/>
+    </entity>
+    <entity name="DiceResultEntity" representedClassName="DiceResultEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="sum" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="resultDice" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DiceResultDieEntity" inverseName="parentResult" inverseEntity="DiceResultDieEntity"/>
+        <relationship name="sourceDice" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DiceEntity" inverseName="results" inverseEntity="DiceEntity"/>
+    </entity>
+    <entity name="DiceRollEntity" representedClassName="DiceRollEntity" syncable="YES" codeGenerationType="class">
+        <relationship name="dice" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="DieEntity" inverseName="parent" inverseEntity="DieEntity"/>
+    </entity>
+    <entity name="DieEntity" representedClassName="DieEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="sides" optional="YES"/>
+        <attribute name="value" optional="YES"/>
+        <relationship name="parent" optional="YES" maxCount="1" deletionRule="Deny" destinationEntity="DiceRollEntity" inverseName="dice" inverseEntity="DiceRollEntity"/>
     </entity>
     <entity name="NoteEntity" representedClassName="NoteEntity" syncable="YES" codeGenerationType="class">
         <attribute name="category" optional="YES" attributeType="String"/>
-        <attribute name="content" optional="YES" attributeType="String"/>
+        <attribute name="content" attributeType="String"/>
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="campaign" maxCount="1" deletionRule="Cascade" destinationEntity="CampaignEntity" inverseName="notes" inverseEntity="CampaignEntity"/>

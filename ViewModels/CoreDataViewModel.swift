@@ -83,10 +83,12 @@ class CoreDataViewModel: ObservableObject {
         }
     }
 
+    //=~ Character Constructor & Descructor
+
     func addCharacter (
         name: String = "john doe",
-        characterClass: String,
-        race: String,
+        characterClass: String = "Fighter",
+        race: String = "Human",
         maxHP: Int16 = 10,
         level: Int16 = 1,
         strength: Int16 = 10,
@@ -117,24 +119,128 @@ class CoreDataViewModel: ObservableObject {
     }
 
     func deleteCharacter(indexSet: IndexSet) {
-        for index in indexSet {
-            let characterToDelete = characters[index]
-            container.viewContext.delete(characterToDelete)
-        }
-
-        for index in indexSet {
-            characters.remove(at: index)
-        }
-
+        for i in indexSet {container.viewContext.delete(characters[i])}
+        for i in indexSet {characters.remove(at: i)}
         saveContext()
     }
 
-    func addStat(name: String, value: Int16) -> CharacterStatEntity {
+    //=~ CharacterStat Private Constructor
+    /// Weak entity CharacterStats is only created on Strong entity Character creation, and deltion is cascaded with parent entity
+
+    private func addStat(name: String, value: Int16) -> CharacterStatEntity {
         let entity = CharacterStatEntity(context: container.viewContext)
         entity.name = name
         entity.value = value
         return entity
     }
+
+    //=~ Note Constructor & Descructor
+
+    func addNote(
+      title: String = "Title",
+      content: String,
+      category: String? = nil,
+      timestamp: Date = Date()
+    ) {
+        let entity = NoteEntity(context: container.viewContext)
+        entity.title = title
+        entity.category = category
+        entity.content = content
+        entity.timestamp = timestamp
+
+        self.notes.append(entity);
+        saveContext()
+    }
+
+    private func deleteNote(indexSet: IndexSet) {
+        for i in indexSet { container.viewContext.delete(notes[i]) }
+        for i in indexSet { notes.remove(at: i) }
+        saveContext()
+    }
+
+    //=~ Dice Constructor, Descructor
+
+    func addDice(
+        sides: Int16 = 20,
+        quantity: Int16 = 1,
+    ) {
+        let entity = DiceEntity(context: container.viewContext)
+        entity.sides = sides
+        entity.quantity = quantity
+        
+        self.dice.append(entity);
+        saveContext()
+    }
+
+    func deleteDice(
+        obj: DiceEntity,
+    ) {
+        let index = dice.firstIndex(of: obj)!
+        dice.remove(at: dice.firstIndex(of: obj)!)
+        container.viewContext.delete(obj);
+        saveContext()
+    }
+
+    func deleteDice(
+        indexSet: IndexSet,
+    ) {
+        for i in indexSet { container.viewContext.delete(dice[i]) }
+        for i in indexSet { dice.remove(at: i) }
+        saveContext()
+    }
+
+    func addDiceRoll(
+        dice: DiceEntity
+    ) -> DiceResultEntity {
+        let root = DiceResultEntity(context: container.viewContext)
+        root.sum = 0
+        root.timestamp = Date()
+
+        for _ in 0...dice.quantity {
+            let child = DiceResultDieEntry(context: container.viewContext)
+            child.result = Int16.random(in: 1...dice.sides)
+            root.sum += child.result
+            root.entries.insert(child)
+
+            container.viewContext.delete(root)
+        }
+
+        return root
+    }
+
+    func deleteDiceRoll(
+        rollResult: DiceResultEntity,
+        dice: DiceEntity,
+    ) {
+        
+
+    }
+
+    struct dieCustom {
+        let sides: Int
+        let quantity: Int
+    }
+
+    func roll(
+        d2: Int = 0,
+        d3: Int = 0,
+        d6: Int = 0,
+        d8: Int = 0,
+        d10: Int = 0,
+        d12: Int = 0,
+        d20: Int = 0,
+        d100: Int = 0,
+        dC: [dieCustom]? = nul,
+    ) -> DiceRollEntity {
+
+    }
+
+    func roll(
+
+    ) -> {
+
+    }
+
 }
 
 //=~ Extensions of CoreData Entity Types
@@ -163,23 +269,18 @@ extension CharacterStatEntity {
     var modifier: Int16 {(value - (value >= 10 ? 10 : 11)) / 2}
 }
 
-extension DiceEntity {
-    public func roll() -> Int {
-        return roll(sides: Int(sides), quantity: Int(quantity))
+extension DiceEntity { }
+
+/*extension DiceResultEntity {
+    public func results() -> [DiceResultDieEntity]? {
+        guard diceSet = resultDice as? Set<DiceResultDieEntity> else {return nil}
+        return diceSet.map{$0}
     }
+}*/
 
-    public func roll(sides: Int, quantity: Int = 1) -> Int {
-        var sum = 0;
-        for _ in 0...Int(quantity) {
-            sum = sum + Int.random(in: 1...Int(sides))
-        }
-        return sum
-    }
-}
+extension DiceResultDieEntity { }
 
-extension NoteEntity {
-
-}
+extension NoteEntity { }
 
 //=~ Debug Preview for CoreData
 
@@ -190,88 +291,67 @@ struct CoreDataViewModelDebugView: View {
     @State var userInput: String = ""
     @State var selectedCharacter: CharacterEntity?
 
-
-
-    var Characters: some View {
-        NavigationView {
+    var CharacterPage: some View {
+        NavigationView{
             VStack {
-                TextField("Character Name", text:$userInput)
-                    .padding(.leading)
-                    .frame(height: 55)
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(10)
-                    .padding()
-                Button{
-                    guard !userInput.isEmpty else { return }
-                    print("pressed")
-                    vm.addCharacter(
-                        name: userInput,
-                        characterClass: "rougue",
-                        race: "human",
-                        intelligence: 7
-                    )
-                    userInput = ""
-
-                } label: {
-                    Text("Add")
-                        .font(Font.headline)
-                        .foregroundColor(Color.white)
-                        .frame(height:55)
-                        .frame(maxWidth: .infinity)
-                        .background(Color.purple)
+                Text("\(vm.characters.count) - \(vm.characterCount)")
+                HStack {
+                    TextField("Character Name", text: $userInput).padding()
+                        .frame(height: 55).frame(maxWidth: .infinity)
+                        .background(Color.gray.opacity(0.2))
                         .cornerRadius(10)
+                        .padding(.leading)
+
+                    Button(action: {
+                        vm.addCharacter(name: userInput, characterClass: "wizard", race: "high elf")
+                        print("pressed")
+                    }, label: {
+                        Text("Add")
+                    })
+                    .frame(height: 55).frame(maxWidth: 90)
+                    .foregroundColor(Color.white).background(Color.blue)
+                    .cornerRadius(10)
+                    .padding(.trailing)
                 }
-                .padding(.horizontal)
 
                 HStack {
                     List {
-                        ForEach(vm.characters, id: \.objectID) { character in
-                            Button(
-                                action: {
-                                    if selectedCharacter == character {
-                                        selectedCharacter = nil
-                                    } else {
-                                        self.selectedCharacter = character
-                                    }
-                                },
-                                label: {
-                                    Text("\(character.name ?? "") - \(character.race ?? "") - \(String(character.int?.modifier ?? -99))")
-                                        .foregroundColor(Color.white)
-                                        .frame(height:40)
-                                        .frame(maxWidth: .infinity)
-                                        .background(Color.gray)
-                                        .cornerRadius(10)
-                                }
-                            )
-                        }
-                        .onDelete(perform: vm.deleteCharacter)
+                        ForEach(vm.characters) { character in
+                            Button(action: {
+                                self.selectedCharacter = character
+                            }) {
+                                Text(character.name!)
+                            }
+                        }.onDelete(perform: vm.deleteCharacter)
                     }
-                    .listStyle(PlainListStyle())
+                    .listStyle(.plain)
 
                     List {
-                        if let character = selectedCharacter, let stats = character.statsList() {
-                            ForEach(stats, id: \.objectID) { stat in
-                                Text("\(stat.name ?? "unk") - \(String(stat.value)) -  \(String(stat.modifier))")
+                        if let character = selectedCharacter {
+                            ForEach(character.statsList() ?? []) { stat in
+                                Text("\(stat.name!) - \(stat.value)/(\(stat.modifier))")
+                                    .monospaced()
                             }
-                        } else {
-                            Text("Select a character to see stats")
-                                .foregroundColor(.secondary)
                         }
                     }
-                    .listStyle(PlainListStyle())
-                    //.listStyle(PlainListStyle())
                 }
-            }
-            .navigationTitle("Character Example")
-        }
+            } // VStack
+        } // NavigationView
     }
 
+    var DiceRollerPage : some View {
+        Text("boop")
+    }
 
     var body : some View {
         TabView {
-            Characters.tabItem {
-                Label("Characters", systemImage: "person.2.fill")
-            }
+            let personIcon = vm.characterCount < 2 ? "person" : (vm.characterCount > 2 ? "person.3" : "person.2")
+
+            CharacterPage
+                .tabItem {Label("Characters", systemImage: personIcon)}
+
+            DiceRollerPage
+                .tabItem {Label("Dice Roller", systemImage: "dice")}
         }
         .tint(Color.purple)
     }
