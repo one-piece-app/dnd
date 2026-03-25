@@ -8,9 +8,9 @@
 ## 📋 Project Management
 
 - [x] Set up branching structure (main, develop, feature branches) 
-- [ ] Share repo with instructor and TA (confirm read access)
+- [x] Share repo with instructor and TA (confirm read access)
 - [ ] Submit GitHub link on Canvas
-- [ ] Finalize and submit Midterm Progress Report PDF to Canvas
+- [x] Finalize and submit Midterm Progress Report PDF to Canvas
 - [ ] Insert mockup image into progress report
 - [ ] Fill in Changes / Refinements section
 - [ ] Fill in Progress Summary section
@@ -115,12 +115,9 @@
 ## 🧪 Testing & Polish
 
 - [ ] Test on iPhone simulator
-- [ ] Test on physical device
-- [ ] Fix layout issues on different screen sizes
 - [ ] Review all navigation flows
 - [ ] Check all data saves and loads correctly
 - [ ] Final UI polish pass
-- [ ] Remove debug code and test data
 
 ---
 
