@@ -1,5 +1,5 @@
 # D&D Companion App — Project Todo List
-**Team One Piece** · iOS Capstone · Spring 2025
+**Team One Piece** · iOS Capstone · Spring 2026
 
 > Check mark items that have been completed.
 
