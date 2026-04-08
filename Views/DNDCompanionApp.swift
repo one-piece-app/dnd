@@ -19,7 +19,8 @@ struct DNDCompanionApp: App {
         .modelContainer(for: [
             Character.self,
             Note.self,
-            DiceRoll.self
+            DiceRoll.self,
+            Spell.self
         ])
     }
 }

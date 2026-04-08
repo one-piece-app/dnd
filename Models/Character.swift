@@ -27,6 +27,7 @@ class Character: Identifiable {
     var currentHP: Int
     var maxHP: Int
     var armorClass: Int
+    var spellSlots: [Int] = Array(repeating: 0, count: 10)
     
     init(
         name: String = "",

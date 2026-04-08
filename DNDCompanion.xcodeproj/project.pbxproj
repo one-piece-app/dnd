@@ -21,6 +21,8 @@
 		16BCFE172F4F5F600087B207 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16BCFE162F4F5F5A0087B207 /* SettingsView.swift */; };
 		16BCFE192F4F5F720087B207 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16BCFE182F4F5F6B0087B207 /* HomeView.swift */; };
 		16BCFE1D2F4F68720087B207 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16BCFE1C2F4F680A0087B207 /* Theme.swift */; };
+		5EAA5A582F5A1B9B00FF0C60 /* CoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5EAA5A552F5A1B9B00FF0C60 /* CoreData.xcdatamodeld */; };
+		5EF39B8E2F5A14D2001D1982 /* CoreDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF39B8D2F5A14D2001D1982 /* CoreDataViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +63,8 @@
 		16BCFE1A2F4F5F7B0087B207 /* CharacterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterViewModel.swift; sourceTree = "<group>"; };
 		16BCFE1B2F4F5F8A0087B207 /* NotesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewModel.swift; sourceTree = "<group>"; };
 		16BCFE1C2F4F680A0087B207 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		5EAA5A572F5A1B9B00FF0C60 /* CoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataModel.xcdatamodel; sourceTree = "<group>"; };
+		5EF39B8D2F5A14D2001D1982 /* CoreDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -77,6 +81,11 @@
 		16BCFDE72F4F58A20087B207 /* DNDCompanionUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = DNDCompanionUITests;
+			sourceTree = "<group>";
+		};
+		5EF39B8C2F5A1492001D1982 /* New Folder */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "New Folder";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -111,6 +120,7 @@
 			children = (
 				16BCFDFA2F4F58DD0087B207 /* Components */,
 				16BCFDF92F4F58D60087B207 /* Views */,
+				5EF39B8C2F5A1492001D1982 /* New Folder */,
 				16BCFDF82F4F58CE0087B207 /* ViewModels */,
 				16BCFDF72F4F58BB0087B207 /* Models */,
 				16BCFDCD2F4F58A00087B207 /* DNDCompanion */,
@@ -136,6 +146,7 @@
 				16BCFE022F4F5A790087B207 /* DiceRoll.swift */,
 				16BCFE012F4F5A720087B207 /* Note.swift */,
 				16BCFE002F4F5A230087B207 /* Character.swift */,
+				5EAA5A552F5A1B9B00FF0C60 /* CoreData.xcdatamodeld */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -146,6 +157,7 @@
 				16BCFE1B2F4F5F8A0087B207 /* NotesViewModel.swift */,
 				16BCFE1A2F4F5F7B0087B207 /* CharacterViewModel.swift */,
 				16BCFE032F4F5AD80087B207 /* DiceViewModel.swift */,
+				5EF39B8D2F5A14D2001D1982 /* CoreDataViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -232,6 +244,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				16BCFDCD2F4F58A00087B207 /* DNDCompanion */,
+				5EF39B8C2F5A1492001D1982 /* New Folder */,
 			);
 			name = DNDCompanion;
 			packageProductDependencies = (
@@ -360,6 +373,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				16BCFE152F4F5F550087B207 /* NoteEditorView.swift in Sources */,
+				5EF39B8E2F5A14D2001D1982 /* CoreDataViewModel.swift in Sources */,
 				16BCFE112F4F5F300087B207 /* CharacterEditView.swift in Sources */,
 				16BCFE052F4F5B830087B207 /* RootView.swift in Sources */,
 				16BCFE192F4F5F720087B207 /* HomeView.swift in Sources */,
@@ -370,6 +384,7 @@
 				16BCFE1D2F4F68720087B207 /* Theme.swift in Sources */,
 				16BCFE0F2F4F5F1C0087B207 /* CharacterDetailView.swift in Sources */,
 				16BCFDCF2F4F58A00087B207 /* DNDCompanionApp.swift in Sources */,
+				5EAA5A582F5A1B9B00FF0C60 /* CoreData.xcdatamodeld in Sources */,
 				16BCFE072F4F5E570087B207 /* Note.swift in Sources */,
 				16BCFE132F4F5F410087B207 /* NotesListView.swift in Sources */,
 				16BCFE0D2F4F5F070087B207 /* CharacterCreateView.swift in Sources */,
@@ -687,6 +702,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		5EAA5A552F5A1B9B00FF0C60 /* CoreData.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				5EAA5A572F5A1B9B00FF0C60 /* CoreDataModel.xcdatamodel */,
+			);
+			currentVersion = 5EAA5A572F5A1B9B00FF0C60 /* CoreDataModel.xcdatamodel */;
+			path = CoreData.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 16BCFDC32F4F58A00087B207 /* Project object */;
 }

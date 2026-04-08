@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="24512" systemVersion="25C56" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="Campaign" representedClassName="Campaign" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="hasNotes" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Note" inverseName="for" inverseEntity="Note"/>
+        <relationship name="withCharacter" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Character" inverseName="in" inverseEntity="Character"/>
+    </entity>
+    <entity name="Character" representedClassName="Character" syncable="YES" codeGenerationType="class">
+        <attribute name="armorClass" attributeType="Integer 16" minValueString="0" defaultValueString="10" usesScalarValueType="YES"/>
+        <attribute name="characterClass" attributeType="String" minValueString="0"/>
+        <attribute name="currentHP" attributeType="Integer 16" minValueString="0" defaultValueString="10" usesScalarValueType="YES"/>
+        <attribute name="level" attributeType="Integer 16" minValueString="1" maxValueString="20" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="maxHP" attributeType="Integer 16" minValueString="0" defaultValueString="10" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="race" attributeType="String"/>
+        <relationship name="in" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Campaign" inverseName="withCharacter" inverseEntity="Campaign"/>
+        <relationship name="stat" toMany="YES" minCount="6" maxCount="6" deletionRule="Cascade" destinationEntity="CharacterStat" inverseName="for" inverseEntity="CharacterStat"/>
+        <userInfo>
+            <entry key="key" value="value"/>
+        </userInfo>
+    </entity>
+    <entity name="CharacterStat" representedClassName="CharacterStat" syncable="YES" codeGenerationType="class">
+        <attribute name="modifier" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="proficiency" attributeType="Integer 16" minValueString="1" maxValueString="3" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="type" attributeType="String" minValueString="3" maxValueString="3"/>
+        <attribute name="value" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="for" maxCount="1" deletionRule="Cascade" destinationEntity="Character" inverseName="stat" inverseEntity="Character"/>
+    </entity>
+    <entity name="Dice" representedClassName="Dice" syncable="YES" codeGenerationType="class">
+        <attribute name="quantity" attributeType="Integer 16" minValueString="1" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="range" attributeType="Integer 16" minValueString="1" defaultValueString="20" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="Note" representedClassName="Note" syncable="YES" codeGenerationType="class">
+        <attribute name="category" optional="YES" attributeType="String"/>
+        <attribute name="content" optional="YES" attributeType="String"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="for" maxCount="1" deletionRule="Cascade" destinationEntity="Campaign" inverseName="hasNotes" inverseEntity="Campaign"/>
+    </entity>
+</model>
