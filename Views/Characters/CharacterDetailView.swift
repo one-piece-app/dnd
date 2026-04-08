@@ -6,38 +6,50 @@
 //
 
 import SwiftUI
+import SwiftData
 import UIKit
 
 struct CharacterDetailView: View {
     
+    @Environment(\.modelContext) private var context
+    @Query var spells: [Spell]
+    
     @State private var selectedTab = 0
     @State private var showEdit = false
     
-    @State private var rollResult: String = ""
+    @State private var rollResult = ""
     @State private var showRollAlert = false
     
     @State private var proficientSkills: Set<String> = []
+    
+    // SPELL FORM STATE
+    @State private var showAddSpell = false
+    @State private var newSpellName = ""
+    @State private var newSpellLevel = 1
+    @State private var newSpellDesc = ""
     
     var character: Character
     
     var body: some View {
         VStack {
             
-            Picker("View", selection: $selectedTab) {
+            Picker("", selection: $selectedTab) {
                 Text("Stats").tag(0)
                 Text("Skills").tag(1)
+                Text("Spells").tag(2)
             }
             .pickerStyle(.segmented)
             .padding()
             
-            if selectedTab == 0 {
-                statsView
-            } else {
-                skillsView
+            switch selectedTab {
+            case 0: statsView
+case 1: skillsView
+case 2: spellsView
+            default: statsView
             }
         }
         .background(Theme.background.ignoresSafeArea())
-        .navigationTitle("Character Sheet")
+        .navigationTitle("Character")
         .toolbar {
             Button("Edit") {
                 showEdit = true
@@ -54,18 +66,18 @@ struct CharacterDetailView: View {
     }
 }
 
-// MARK: Stats View
+//
+// MARK: - STATS
+//
 extension CharacterDetailView {
     
     var statsView: some View {
         List {
-            Section("Basic Info") {
+            Section("Info") {
                 Text(character.name)
-                    .font(.headline)
-                
                 Text("\(character.race) \(character.characterClass)")
                 Text("Level \(character.level)")
-                Text("Proficiency Bonus: +\(character.proficiencyBonus)")
+                Text("Proficiency +\(character.proficiencyBonus)")
             }
             
             Section("Ability Scores") {
@@ -81,7 +93,7 @@ extension CharacterDetailView {
                 HStack {
                     Text("HP")
                     Spacer()
-                    Text("\(character.currentHP) / \(character.maxHP)")
+                    Text("\(character.currentHP)/\(character.maxHP)")
                 }
                 
                 HStack {
@@ -95,26 +107,53 @@ extension CharacterDetailView {
         .background(Theme.background)
     }
     
-    private func statRow(_ label: String, _ value: Int) -> some View {
-        HStack {
+    func statRow(_ label: String, _ value: Int) -> some View {
+        let mod = character.modifier(for: value)
+        
+        return HStack {
             Text(label)
             Spacer()
             Text("\(value)")
-            
-            let modifier = character.modifier(for: value)
-            Text(modifier >= 0 ? "+\(modifier)" : "\(modifier)")
+            Text(mod >= 0 ? "+\(mod)" : "\(mod)")
                 .foregroundColor(Theme.gold)
         }
     }
 }
 
-// MARK: Skills View
+//
+// MARK: - SKILLS
+//
 extension CharacterDetailView {
     
     var skillsView: some View {
         List {
             ForEach(skillList, id: \.name) { skill in
-                skillRow(skill)
+                let abilityMod = character.modifier(for: skill.ability)
+                let isProf = proficientSkills.contains(skill.name)
+                let total = abilityMod + (isProf ? character.proficiencyBonus : 0)
+                
+                HStack {
+                    Button(skill.name) {
+                        rollSkill(name: skill.name, bonus: total)
+                    }
+                    
+                    Spacer()
+                    
+                    Toggle("", isOn: Binding(
+                        get: { isProf },
+                        set: { val in
+                            if val {
+                                proficientSkills.insert(skill.name)
+                            } else {
+                                proficientSkills.remove(skill.name)
+                            }
+                        }
+                    ))
+                    .labelsHidden()
+                    
+                    Text(total >= 0 ? "+\(total)" : "\(total)")
+                        .bold()
+                }
             }
         }
         .scrollContentBackground(.hidden)
@@ -144,46 +183,90 @@ extension CharacterDetailView {
         ]
     }
     
-    func skillRow(_ skill: (name: String, ability: Int)) -> some View {
-        let abilityModifier = character.modifier(for: skill.ability)
-        let isProficient = proficientSkills.contains(skill.name)
-        let totalBonus = abilityModifier + (isProficient ? character.proficiencyBonus : 0)
-        
-        return HStack {
-            
-            Button {
-                rollSkill(name: skill.name, bonus: totalBonus)
-            } label: {
-                Text(skill.name)
-            }
-            
-            Spacer()
-            
-            Toggle("", isOn: Binding(
-                get: { proficientSkills.contains(skill.name) },
-                set: { newValue in
-                    if newValue {
-                        proficientSkills.insert(skill.name)
-                    } else {
-                        proficientSkills.remove(skill.name)
-                    }
-                }
-            ))
-            .labelsHidden()
-            
-            Text(totalBonus >= 0 ? "+\(totalBonus)" : "\(totalBonus)")
-                .bold()
-        }
-    }
-    
     func rollSkill(name: String, bonus: Int) {
         let roll = Int.random(in: 1...20)
         let total = roll + bonus
         
-        let generator = UIImpactFeedbackGenerator(style: .medium)
-        generator.impactOccurred()
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         
         rollResult = "\(name)\n\nRoll: \(roll)\nBonus: \(bonus)\nTotal: \(total)"
         showRollAlert = true
+    }
+}
+
+//
+// MARK: - SPELLS
+//
+extension CharacterDetailView {
+    
+    var spellsView: some View {
+        VStack {
+            
+            List {
+                ForEach(spells) { spell in
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(spell.name).bold()
+                        Text("Level \(spell.level)")
+                        Text(spell.desc).font(.caption)
+                        
+                        Toggle("Prepared", isOn: Binding(
+                            get: { spell.isPrepared },
+                            set: { spell.isPrepared = $0 }
+                        ))
+                    }
+                }
+                .onDelete { indexSet in
+                    for i in indexSet {
+                        context.delete(spells[i])
+                    }
+                }
+            }
+            
+            Button("Add Spell") {
+                showAddSpell = true
+            }
+            .padding()
+            .background(Theme.accent)
+            .cornerRadius(12)
+            .foregroundColor(.white)
+        }
+        .sheet(isPresented: $showAddSpell) {
+            VStack(spacing: 20) {
+                
+                Text("New Spell")
+                    .font(.headline)
+                
+                TextField("Name", text: $newSpellName)
+                    .textFieldStyle(.roundedBorder)
+                
+                Stepper("Level \(newSpellLevel)", value: $newSpellLevel, in: 0...9)
+                
+                TextEditor(text: $newSpellDesc)
+                    .frame(height: 100)
+                    .border(Color.gray)
+                
+                Button("Save") {
+                    let spell = Spell(
+                        name: newSpellName,
+                        level: newSpellLevel,
+                        desc: newSpellDesc
+                    )
+                    
+                    context.insert(spell)
+                    
+                    newSpellName = ""
+                    newSpellDesc = ""
+                    newSpellLevel = 1
+                    
+                    showAddSpell = false
+                }
+                .buttonStyle(.borderedProminent)
+                
+                Button("Cancel") {
+                    showAddSpell = false
+                }
+            }
+            .padding()
+        }
     }
 }
