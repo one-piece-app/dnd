@@ -6,15 +6,14 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct RootView: View {
     
-    @Query var characters: [Character]
+    @EnvironmentObject var vm: CoreDataViewModel
     
     var body: some View {
         NavigationStack {
-            if characters.isEmpty {
+            if vm.characters.isEmpty {
                 CharacterCreateView()
             } else {
                 HomeView()

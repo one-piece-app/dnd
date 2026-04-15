@@ -6,10 +6,10 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct CharacterCreateView: View {
-    @Environment(\.modelContext) private var context
+
+    @EnvironmentObject var vm: CoreDataViewModel
     
     @State private var name = ""
     @State private var race = ""
@@ -51,20 +51,18 @@ struct CharacterCreateView: View {
             }
             
             Button("Save Character") {
-                let newCharacter = Character(
+                vm.addCharacter(
                     name: name,
-                    race: race,
                     characterClass: characterClass,
-                    level: level,
-                    strength: strength,
-                    dexterity: dexterity,
-                    constitution: constitution,
-                    intelligence: intelligence,
-                    wisdom: wisdom,
-                    charisma: charisma
+                    race: race,
+                    level: Int16(level),
+                    strength: Int16(strength),
+                    dexterity: Int16(dexterity),
+                    constitution: Int16(constitution),
+                    wisdom: Int16(wisdom),
+                    intelligence: Int16(intelligence),
+                    charisma: Int16(charisma)
                 )
-                
-                context.insert(newCharacter)
             }
             .buttonStyle(.borderedProminent)
         }

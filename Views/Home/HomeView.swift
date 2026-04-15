@@ -6,18 +6,17 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct HomeView: View {
     
-    @Query var characters: [Character]
+    @EnvironmentObject var vm: CoreDataViewModel
     @State private var showSettings = false
     
     var body: some View {
         ScrollView {
             VStack(spacing: 30) {
                 
-                if let character = characters.first {
+                if let character = vm.characters.first {
                     characterCard(character)
                 }
                 
@@ -26,7 +25,7 @@ struct HomeView: View {
                 }
                 
                 navButton("Character Sheet", system: "person.crop.rectangle") {
-                    if let character = characters.first {
+                    if let character = vm.characters.first {
                         CharacterDetailView(character: character)
                     }
                 }
@@ -56,13 +55,13 @@ struct HomeView: View {
         }
     }
     
-    func characterCard(_ character: Character) -> some View {
+    func characterCard(_ character: CharacterEntity) -> some View {
         VStack(spacing: 8) {
-            Text(character.name)
+            Text(character.name ?? "")
                 .font(.title2)
                 .bold()
             
-            Text("\(character.race) \(character.characterClass)")
+            Text("\(character.race ?? "") \(character.characterClass ?? "")")
                 .foregroundColor(Theme.textSecondary)
             
             Text("Level \(character.level)")
