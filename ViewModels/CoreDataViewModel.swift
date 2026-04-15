@@ -217,7 +217,7 @@ class CoreDataViewModel: ObservableObject {
     }
 }
 
-//=~ Extensions of CoreData Entity Types
+// MARK: - Extensions
 
 extension CharacterEntity {
     public func statsList() -> [CharacterStatEntity]? {
