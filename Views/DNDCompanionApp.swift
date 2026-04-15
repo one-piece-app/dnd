@@ -6,21 +6,17 @@
 //
 
 import SwiftUI
-import SwiftData
 
 @main
 struct DNDCompanionApp: App {
+    @StateObject private var vm = CoreDataViewModel()
+
     var body: some Scene {
         WindowGroup {
             RootView()
+                .environmentObject(vm)
                 .preferredColorScheme(.dark)
                 .tint(Theme.gold)
         }
-        .modelContainer(for: [
-            Character.self,
-            Note.self,
-            DiceRoll.self,
-            Spell.self
-        ])
     }
 }

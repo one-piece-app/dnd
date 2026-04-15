@@ -6,33 +6,43 @@
         <relationship name="notes" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NoteEntity" inverseName="campaign" inverseEntity="NoteEntity"/>
     </entity>
     <entity name="CharacterEntity" representedClassName="CharacterEntity" syncable="YES" codeGenerationType="class">
-        <attribute name="characterClass" attributeType="String" minValueString="0" defaultValueString=""/>
-        <attribute name="currentHP" attributeType="Integer 16" minValueString="0" defaultValueString="10" usesScalarValueType="YES"/>
-        <attribute name="level" attributeType="Integer 16" minValueString="1" maxValueString="20" defaultValueString="1" usesScalarValueType="YES"/>
-        <attribute name="maxHP" attributeType="Integer 16" minValueString="0" defaultValueString="10" usesScalarValueType="YES"/>
+        <attribute name="armorClass" attributeType="Integer 16" defaultValueString="10" usesScalarValueType="YES"/>
+        <attribute name="characterClass" attributeType="String" defaultValueString=""/>
+        <attribute name="currentHP" attributeType="Integer 16" defaultValueString="10" usesScalarValueType="YES"/>
+        <attribute name="level" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="maxHP" attributeType="Integer 16" defaultValueString="10" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String" defaultValueString=""/>
         <attribute name="race" attributeType="String" defaultValueString=""/>
+        <attribute name="skillProficiencies" optional="YES" attributeType="String"/>
         <relationship name="campaigns" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CampaignEntity" inverseName="characters" inverseEntity="CampaignEntity"/>
+        <relationship name="spells" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SpellEntity" inverseName="character" inverseEntity="SpellEntity"/>
         <relationship name="stats" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CharacterStatEntity" inverseName="character" inverseEntity="CharacterStatEntity"/>
         <userInfo>
             <entry key="key" value="value"/>
         </userInfo>
     </entity>
     <entity name="CharacterStatEntity" representedClassName="CharacterStatEntity" syncable="YES" codeGenerationType="class">
-        <attribute name="name" attributeType="String" minValueString="3" maxValueString="3" defaultValueString="nil"/>
-        <attribute name="proficiency" attributeType="Integer 16" minValueString="1" maxValueString="3" defaultValueString="1" usesScalarValueType="YES"/>
-        <attribute name="value" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="character" maxCount="1" deletionRule="Cascade" destinationEntity="CharacterEntity" inverseName="stats" inverseEntity="CharacterEntity"/>
+        <attribute name="name" attributeType="String" defaultValueString=""/>
+        <attribute name="proficiency" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="value" attributeType="Integer 16" defaultValueString="10" usesScalarValueType="YES"/>
+        <relationship name="character" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CharacterEntity" inverseName="stats" inverseEntity="CharacterEntity"/>
     </entity>
     <entity name="DiceEntity" representedClassName="DiceEntity" syncable="YES" codeGenerationType="class">
-        <attribute name="quantity" attributeType="Integer 16" minValueString="1" defaultValueString="1" usesScalarValueType="YES"/>
-        <attribute name="sides" attributeType="Integer 16" minValueString="1" defaultValueString="20" usesScalarValueType="YES"/>
+        <attribute name="quantity" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="sides" attributeType="Integer 16" defaultValueString="20" usesScalarValueType="YES"/>
     </entity>
     <entity name="NoteEntity" representedClassName="NoteEntity" syncable="YES" codeGenerationType="class">
         <attribute name="category" optional="YES" attributeType="String"/>
         <attribute name="content" optional="YES" attributeType="String"/>
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String"/>
-        <relationship name="campaign" maxCount="1" deletionRule="Cascade" destinationEntity="CampaignEntity" inverseName="notes" inverseEntity="CampaignEntity"/>
+        <relationship name="campaign" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CampaignEntity" inverseName="notes" inverseEntity="CampaignEntity"/>
+    </entity>
+    <entity name="SpellEntity" representedClassName="SpellEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="desc" optional="YES" attributeType="String"/>
+        <attribute name="isPrepared" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="level" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="character" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CharacterEntity" inverseName="spells" inverseEntity="CharacterEntity"/>
     </entity>
 </model>

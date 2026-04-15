@@ -6,13 +6,12 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct NoteEditorView: View {
-    @Environment(\.modelContext) private var context
+    @EnvironmentObject var vm: CoreDataViewModel
     @Environment(\.dismiss) private var dismiss
     
-    var note: Note?
+    var note: NoteEntity?
     
     @State private var title = ""
     @State private var content = ""
@@ -34,25 +33,18 @@ struct NoteEditorView: View {
             
             Button("Save") {
                 if let note = note {
-                    note.title = title
-                    note.content = content
-                    note.category = category
+                    vm.updateNote(note, title: title, content: content, category: category)
                 } else {
-                    let newNote = Note(
-                        title: title,
-                        content: content,
-                        category: category
-                    )
-                    context.insert(newNote)
+                    vm.addNote(title: title, content: content, category: category)
                 }
                 dismiss()
             }
         }
         .onAppear {
             if let note = note {
-                title = note.title
-                content = note.content
-                category = note.category
+                title = note.title ?? ""
+                content = note.content ?? ""
+                category = note.category ?? "Campaign"
             }
         }
         .navigationTitle("Note")
