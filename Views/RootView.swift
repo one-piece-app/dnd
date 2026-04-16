@@ -15,35 +15,25 @@ struct RootView: View {
 
 
     var body: some View {
-        NavigationSplitView(preferredCompactColumn: $preferredColumn) {
+        NavigationStack {
             List {
                 ForEach(vm.characters) { character in
-                    Button(character.name ?? "Unnamed Character") {
-                        selectedCharacter = character
-                        preferredColumn = .detail
+                    NavigationLink(character.name ?? "Unnamed Character") {
+                        HomeView(character: character)
                     }
                 }
                 .onDelete(perform: { offsets in
                     vm.deleteCharacter(indexSet: offsets)
                 })
             }
-            .listStyle(.plain)
             .toolbar {
                 NavigationLink(destination: CharacterCreateView()) {
                     Image(systemName: "plus")
                 }
             }
+            .background(Theme.background.ignoresSafeArea())
             .navigationTitle("Character Selector")
-        } detail: {
-            if let character = selectedCharacter {
-                HomeView(character: character)
-            } else {
-                Button("Invalid state occured, press me to return!") {
-                    preferredColumn = .sidebar
-                }
-            }
         }
-        .background(Theme.background.ignoresSafeArea())
     }
 }
 
