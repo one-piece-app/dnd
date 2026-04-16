@@ -60,9 +60,6 @@ After selecting a character, the Character screen displays three tabs:
 •	Skills — Lists all D&D skill checks with modifiers. Along with this you can select whether or not your character is proficient in the skill by tapping the toggle. This will automatically add your proficiency bonus to the skill.
 •	Spells — You are able to add spells for your character. In the add spell page you can give the spell a name, the level of the spell, and a description. Once a spell is created you can use the toggle button to designate whether or not the spell is prepared for the character.
 
-
-⚠ Note	Character data is stored locally. There is no cloud sync — data will be lost if the app is uninstalled.
-
 4.3 Notes & Campaign Tracking
 The notes allow for a player to create a note with categories ranging from Campaign, NPC, Quest, and Session. This allows for players to break up their notes in ways that are easier to keep track of.
 Creating a Note
