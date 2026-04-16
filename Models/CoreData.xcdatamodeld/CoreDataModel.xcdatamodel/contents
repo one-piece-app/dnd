@@ -31,6 +31,14 @@
         <attribute name="quantity" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
         <attribute name="sides" attributeType="Integer 16" defaultValueString="20" usesScalarValueType="YES"/>
     </entity>
+    <entity name="DiceRollHistoryEntity" representedClassName="DiceRollHistoryEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="diceType" attributeType="Integer 16" defaultValueString="20" usesScalarValueType="YES"/>
+        <attribute name="modifier" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="quantity" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="results" optional="YES" attributeType="String"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="total" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
     <entity name="NoteEntity" representedClassName="NoteEntity" syncable="YES" codeGenerationType="class">
         <attribute name="category" optional="YES" attributeType="String"/>
         <attribute name="content" optional="YES" attributeType="String"/>

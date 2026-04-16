@@ -19,6 +19,7 @@ class CoreDataViewModel: ObservableObject {
     @Published var notes: [NoteEntity] = []
     @Published var stats: [CharacterStatEntity] = []
     @Published var spells: [SpellEntity] = []
+    @Published var rollHistory: [DiceRollHistoryEntity] = []
 
     var campaignsCount: Int {
         do {
@@ -57,6 +58,9 @@ class CoreDataViewModel: ObservableObject {
         notes = fetch(entityName: "NoteEntity")
         stats = fetch(entityName: "CharacterStatEntity")
         spells = fetch(entityName: "SpellEntity")
+        let rollRequest = NSFetchRequest<DiceRollHistoryEntity>(entityName: "DiceRollHistoryEntity")
+        rollRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
+        rollHistory = (try? container.viewContext.fetch(rollRequest)) ?? []
     }
 
     func fetch<T: NSFetchRequestResult>(entityName: String) -> [T] {
@@ -215,6 +219,24 @@ class CoreDataViewModel: ObservableObject {
         spell.isPrepared.toggle()
         saveContext()
     }
+
+    // MARK: - Dice Roll History
+
+    func addDiceRoll(diceType: Int, quantity: Int, modifier: Int, results: [Int], total: Int) {
+        let entity = DiceRollHistoryEntity(context: container.viewContext)
+        entity.diceType = Int16(diceType)
+        entity.quantity = Int16(quantity)
+        entity.modifier = Int16(modifier)
+        entity.results = results.map { String($0) }.joined(separator: ",")
+        entity.total = Int16(total)
+        entity.timestamp = Date()
+        saveContext()
+    }
+
+    func deleteRoll(at index: Int) {
+        container.viewContext.delete(rollHistory[index])
+        saveContext()
+    }
 }
 
 //=~ Extensions of CoreData Entity Types
@@ -287,6 +309,13 @@ extension DiceEntity {
 }
 
 extension NoteEntity {}
+
+extension DiceRollHistoryEntity {
+    func resultsList() -> [Int] {
+        guard let raw = results, !raw.isEmpty else { return [] }
+        return raw.split(separator: ",").compactMap { Int($0) }
+    }
+}
 
 //=~ Debug Preview for CoreData
 
