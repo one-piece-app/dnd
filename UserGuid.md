@@ -6,7 +6,7 @@ Team One Piece
 iOS Capstone Project | Swift & SwiftUI | Spring 2025
 
 Team Member	Role
-Skylar	Team Leader / Scheduler
+Skylar Beesley	Team Leader / Scheduler
 Ivan Garcia	Frontend Development
 Barrett Emerson	Backend Development
 Jagadeesh Kumar	UI/UX Designer
@@ -36,7 +36,20 @@ The app is distributed as source code via GitHub and run directly through Xcode 
 3.	The iOS Simulator will open automatically with the app running.
 
 3. App Overview & Navigation
-When the app is launched, you will first see the Characters page. If you do not already have a created Character you will be prompted to create one. If you have an already created character you will see the Character’s name along with the race, class, and level of the character. From there if you select a character you will be taken to the quick access page. Here at the top and bottom of the page you will see quick information for your character. From there you will have buttons that lead to the Dice roller, Character Sheet, Notes, and Settings. Clicking each individual button will take you to their designated page.
+The D&D Companion App is organized around a central Quick Access page that connects all major features.
+
+App Launch
+•	On first launch, you will be prompted to create a character.
+•	If a character already exists, you will see your character’s name, race, class, and level on the Character Selection screen.
+
+Quick Access Page
+•	After selecting a character, you are taken to the Quick Access Page
+•	This page displays a summary of your character’s key information and provides buttons to navigate to each feature:
+o	Dice Roller
+o	Character Sheet
+o	Notes
+o	Settings.
+
 
 4. Feature Guide
 4.1 Dice Roller
@@ -51,32 +64,41 @@ How to Roll
 3.	Adjust the quantity using the + / − controls if rolling multiple dice.
 4.	Add a modifier if needed (e.g., +5 for an attack roll bonus).
 5.	Tap Roll. The result is displayed on screen and is added to roll history.
+
+
 4.2 Character Sheet
 The Character sheet shows information for the character such as level, AC, HP, Stats, Skills, and spells. In this page you will see the selected character at the top allowing you to swap between the stats, skills, and spells through the tabs below the character name, level, AC, and HP. 
 
-Viewing a Character — Stats, Skills, and Spells
+Character Creation
+1.	When first launching the app, you will be prompted to create a character. Enter your character’s name, race, class, and level using the provided fields. Level can be adjusted using the -/+ controls. Once your basic info is filled in, you have two options for setting your ability scores.
+a.	Manual entry: Use the -/+ controls next to each stat (STR, DEX, CON, INT, WIS, CHA) to set your scores individually.
+b.	Roll Stats: Tap the Roll Stats button at the bottom of the screen to randomly generate your ability scores.
+2.	Once you are satisfied with your character, tap Save Character to finish. From there your character will then appear on the character selection screen.
+
+3.	To create an additional character later, tap the + button in the top-right corner of the Character Selection screen to bring up the character creation form again.
+
+Viewing Character Stats, Skills, and Spells
 After selecting a character, the Character screen displays three tabs:
 •	Stats — Shows core character info: name, race, class, level, AC, and all six ability scores with calculated modifiers. Along with this it shows your proficiency bonus that will be applied to skills you are proficient in.
-•	Skills — Lists all D&D skill checks with modifiers. Along with this you can select whether or not your character is proficient in the skill by tapping the toggle. This will automatically add your proficiency bonus to the skill.
-•	Spells — You are able to add spells for your character. In the add spell page you can give the spell a name, the level of the spell, and a description. Once a spell is created you can use the toggle button to designate whether or not the spell is prepared for the character.
+•	Skills — Lists all D&D skill checks with modifiers. Along with this you can select whether your character is proficient in the skill by tapping the toggle. This will automatically add your proficiency bonus to the skill.
+•	Spells — You are able to add spells for your character. In the add spell page you can give the spell a name, the level of the spell, and a description. Once a spell is created you can use the toggle button to designate whether the spell is prepared for the character.
 
 4.3 Notes & Campaign Tracking
-The notes allow for a player to create a note with categories ranging from Campaign, NPC, Quest, and Session. This allows for players to break up their notes in ways that are easier to keep track of.
+The notes allow for a player to create a note with categories ranging from Campaign, NPC, Quest, and Session. This allows players to break up their notes in ways that are easier to keep track of.
 Creating a Note
-1.	Tap Notes from the Home Screen.
+1.	Tap Notes from the Quick Access Page
 2.	Tap + to create a new note.
 3.	Choose a category
 4.	Enter a title and write your note in the body field.
 5.	Tap Save and the note appears in your notes list.
-
 Organizing & Editing Notes
-1.	Notes are organized by category: Campaign Notes, NPC Info, Quest Log, Session Recap.
+1.	Notes are displayed in the order they were created, with the most recently added note appearing at the bottom of the list.
 2.	Tap any note to open and edit it.
 3.	Tap Save to commit changes.
 4.	Swipe left on a note and tap Delete to remove it.
 
 4.4 Settings
-The settings page currently only allows for disabling sound.
+The settings page currently only allows for toggling sound.
 
 Settings
 •	Toggle sound on and off
