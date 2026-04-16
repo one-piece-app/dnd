@@ -48,8 +48,15 @@ struct HomeView: View {
             .padding()
         }
         .background(Theme.background.ignoresSafeArea())
-        .navigationTitle("D&D Companion")
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("D&D Companion")
+                    .font(.largeTitle)
+                    .bold()
+                    .foregroundColor(.white)
+            }
+        }
         .sheet(isPresented: $showSettings) {
             SettingsView()
         }
