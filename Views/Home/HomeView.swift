@@ -11,15 +11,15 @@ struct HomeView: View {
     
     @EnvironmentObject var vm: CoreDataViewModel
     @State private var showSettings = false
-    
+
+    let character: CharacterEntity
+
     var body: some View {
         ScrollView {
             VStack(spacing: 30) {
                 
-                if let character = vm.characters.first {
-                    characterCard(character)
-                }
-                
+                characterCard(character)
+
                 navButton("Dice Roller", system: "die.face.5.fill") {
                     DiceView()
                 }

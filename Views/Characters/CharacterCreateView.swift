@@ -10,7 +10,8 @@ import SwiftUI
 struct CharacterCreateView: View {
 
     @EnvironmentObject var vm: CoreDataViewModel
-    
+    @Environment(\.dismiss) private var dismiss
+
     @State private var name = ""
     @State private var race = ""
     @State private var characterClass = ""
@@ -22,7 +23,7 @@ struct CharacterCreateView: View {
     @State private var intelligence = 10
     @State private var wisdom = 10
     @State private var charisma = 10
-    
+
     var body: some View {
         Form {
             Section("Basic Info") {
@@ -63,6 +64,7 @@ struct CharacterCreateView: View {
                     intelligence: Int16(intelligence),
                     charisma: Int16(charisma)
                 )
+                dismiss()
             }
             .buttonStyle(.borderedProminent)
         }
